@@ -1,0 +1,37 @@
+---
+- name: Setup rclone directory
+  file:
+    state: directory
+    path: "{{ desktop_user_vars.dir }}/.config/rclone"
+- name: Copy inplace rclone config
+  copy:
+    content: "{{ rclone_conf }}"
+    dest: "{{ desktop_user_vars.dir }}/.config/rclone/rclone.conf"
+- name: Setup restic directory
+  file:
+    state: directory
+    path: "{{ desktop_user_vars.dir }}/.config/restic"
+- name: Setup restic excludes file
+  template:
+    src: restic-excludes
+    dest: "{{ desktop_user_vars.dir }}/.config/restic/excludes"
+# TODO include user systemd role (systemd-user.yml)
+- name: Setup restic user service
+  template:
+    src: restic.service
+    dest: "{{ desktop_user_vars.dir }}/.config/systemd/user/restic.service"
+  notify: [ 'systemd user' ]
+- name: Setup restic timer service
+  copy:
+    src: restic.timer
+    dest:  "{{ desktop_user_vars.dir }}/.config/systemd/user/restic.timer"
+  notify: [ 'systemd user' ]
+- meta: flush_handlers
+- name: Enable and start restic timer
+  service:
+    name: restic.timer
+    state: started
+    enabled: yes
+    user: yes
+  environment:
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ desktop_user_vars.uid }}/bus"

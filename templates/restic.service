@@ -1,0 +1,5 @@
+[Unit]
+Description=Restic
+
+[Service]
+ExecStart=/usr/bin/restic -r rclone:{{ rclone_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes

@@ -1,0 +1,3 @@
+{% for exclude in restic_excludes %}
+{{ exclude }}
+{% endfor %}
