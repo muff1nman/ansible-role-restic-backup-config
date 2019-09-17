@@ -15,7 +15,6 @@
   template:
     src: restic-excludes
     dest: "{{ desktop_user_vars.dir }}/.config/restic/excludes"
-# TODO include user systemd role (systemd-user.yml)
 - name: Setup restic user service
   template:
     src: restic.service
