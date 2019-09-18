@@ -35,8 +35,6 @@
     status_code: "200,201"
   register: restic_healthcheck
   changed_when: restic_healthcheck.status == 201
-- debug:
-    var: restic_healthcheck
 - name: Setup ping url variable
   set_fact:
     restic_snitch_ping_url: "{{ restic_healthcheck.json.ping_url }}"
