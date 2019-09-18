@@ -3,5 +3,5 @@ Description=Restic
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/restic -r rclone:{{ rclone_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes {{ desktop_user_vars.dir }}
+ExecStart=/usr/bin/restic -r rclone:{{ rclone_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes --password-file {{ desktop_user_vars.dir }}/.config/restic/pass {{ desktop_user_vars.dir }}
 ExecStartPost=/usr/bin/curl -f -m 60 {{ restic_snitch_ping_url }}
