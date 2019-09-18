@@ -15,6 +15,30 @@
   template:
     src: restic-excludes
     dest: "{{ desktop_user_vars.dir }}/.config/restic/excludes"
+- name: Setup healthcheck
+  uri:
+    body: |
+      {
+        "name": "{{ inventory_hostname }} Restic Backup",
+        "tags": "backup",
+        "timeout": 86400,
+        "grace": 43200,
+        "channels": "*",
+        "unique": [ "name" ]
+      }
+    body_format: json
+    method: POST
+    headers:
+      X-Api-Key: "{{ healthcheck_api_key }}"
+    url: "https://{{ healthcheck_host }}/api/v1/checks/"
+    return_content: yes
+    status_code: "200,201"
+  register: restic_healthcheck
+- debug:
+    var: restic_healthcheck
+- name: Setup ping url variable
+  set_fact:
+    restic_snitch_ping_url: "{{ restic_healthcheck.json.ping_url }}"
 - name: Setup restic user service
   template:
     src: restic.service
