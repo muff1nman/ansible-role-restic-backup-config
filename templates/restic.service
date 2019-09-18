@@ -2,4 +2,5 @@
 Description=Restic
 
 [Service]
+Type=oneshot
 ExecStart=/usr/bin/restic -r rclone:{{ rclone_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes {{ destkop_user_vars.dir }}
