@@ -3,17 +3,13 @@
   file:
     state: directory
     path: "{{ desktop_user_vars.dir }}/.config/rclone"
-  when:
-  - restic_use_rclone is defined
-  - restic_use_rclone
+  when: rclone_conf is defined
 - name: Copy inplace rclone config
   copy:
     content: "{{ rclone_conf }}"
     dest: "{{ desktop_user_vars.dir }}/.config/rclone/rclone.conf"
     mode: 0600
-  when:
-  - restic_use_rclone is defined
-  - restic_use_rclone
+  when: rclone_conf is defined
 - name: Setup restic directory
   file:
     state: directory

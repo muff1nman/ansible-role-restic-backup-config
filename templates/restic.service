@@ -8,9 +8,5 @@ Type=oneshot
 Environment="{{ env_var }}"
 {% endfor %}
 {% endif %}
-{% if restic_use_rclone %}
-ExecStart=/usr/bin/restic -r rclone:{{ rclone_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes --password-file {{ desktop_user_vars.dir }}/.config/restic/pass {{ desktop_user_vars.dir }}
-{% else %}
-ExecStart=/usr/bin/restic -r {{ restic_remote }}:{{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes --password-file {{ desktop_user_vars.dir }}/.config/restic/pass {{ desktop_user_vars.dir }}
-{% endif %}
+ExecStart=/usr/bin/restic -r {{ restic_repo }} backup --one-file-system --verbose --verbose --exclude-file={{ desktop_user_vars.dir }}/.config/restic/excludes --password-file {{ desktop_user_vars.dir }}/.config/restic/pass {{ desktop_user_vars.dir }}
 ExecStartPost=/usr/bin/curl -f -m 60 {{ restic_snitch_ping_url }}
